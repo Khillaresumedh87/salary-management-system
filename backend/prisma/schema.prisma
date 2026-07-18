@@ -6,3 +6,31 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Employee {
+  id            Int             @id @default(autoincrement())
+  employeeCode  String          @unique
+  firstName     String
+  lastName      String
+  email         String          @unique
+  department    String
+  designation   String
+  country       String
+  currency      String
+  salary        Float
+  joiningDate   DateTime
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  salaryHistory SalaryHistory[]
+}
+
+model SalaryHistory {
+  id         Int      @id @default(autoincrement())
+  employeeId Int
+  oldSalary  Float
+  newSalary  Float
+  changedAt  DateTime @default(now())
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+}
